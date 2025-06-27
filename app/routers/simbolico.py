@@ -1,11 +1,11 @@
 from fastapi import APIRouter
 from app.models.requests import SimbolicoRequest
-from app.models.responses import SimbolicoResponse
+from app.models.responses import CalculoSimbolicoResponse
 from app.services.math_service import MathService
 
 router = APIRouter()
 
-@router.post("/simbolico", response_model=SimbolicoResponse)
+@router.post("/simbolico", response_model=CalculoSimbolicoResponse)
 async def calcular_simbolico(request: SimbolicoRequest):
     """
     Realiza cálculo simbólico de integral (indefinida ou definida).
@@ -14,7 +14,7 @@ async def calcular_simbolico(request: SimbolicoRequest):
         # Validar função
         valida, expr, mensagem = MathService.validar_e_processar_funcao(request.funcao)
         if not valida:
-            return SimbolicoResponse(
+            return CalculoSimbolicoResponse(
                 sucesso=False,
                 erro=mensagem
             )
@@ -34,7 +34,7 @@ async def calcular_simbolico(request: SimbolicoRequest):
                 request.b
             )
         
-        return SimbolicoResponse(
+        return CalculoSimbolicoResponse(
             sucesso=True,
             antiderivada=resultado_simbolico['antiderivada'],
             antiderivada_latex=resultado_simbolico['antiderivada_latex'] if request.formato_latex else None,
@@ -46,7 +46,7 @@ async def calcular_simbolico(request: SimbolicoRequest):
         )
         
     except Exception as e:
-        return SimbolicoResponse(
+        return CalculoSimbolicoResponse(
             sucesso=False,
             erro=f"Erro no cálculo simbólico: {str(e)}"
         ) 

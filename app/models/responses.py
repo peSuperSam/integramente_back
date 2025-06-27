@@ -18,7 +18,7 @@ class AreaResponse(BaseModel):
     calculado_em: Optional[str] = None
     erro: Optional[str] = None
 
-class SimbolicoResponse(BaseModel):
+class CalculoSimbolicoResponse(BaseModel):
     sucesso: bool
     antiderivada: Optional[str] = None
     antiderivada_latex: Optional[str] = None
@@ -37,6 +37,29 @@ class ValidarResponse(BaseModel):
 class ExemplosResponse(BaseModel):
     exemplos: Dict[str, List[str]]
     total: int
+
+class CalculoDerivadaResponse(BaseModel):
+    sucesso: bool
+    derivada: Optional[str] = None
+    derivada_latex: Optional[str] = None
+    derivada_simplificada: Optional[str] = None
+    passos_resolucao: Optional[List[str]] = None
+    funcao_original: Optional[str] = None
+    tipo_derivada: Optional[str] = None
+    calculado_em: Optional[str] = None
+    erro: Optional[str] = None
+
+class CalculoLimiteResponse(BaseModel):
+    sucesso: bool
+    valor_limite: Optional[float] = None
+    limite_latex: Optional[str] = None
+    tipo_limite: Optional[str] = None
+    existe_limite: Optional[bool] = None
+    passos_resolucao: Optional[List[str]] = None
+    funcao_original: Optional[str] = None
+    ponto_limite: Optional[float] = None
+    calculado_em: Optional[str] = None
+    erro: Optional[str] = None
 
 class GraficoResponse(BaseModel):
     sucesso: bool

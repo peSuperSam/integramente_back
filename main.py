@@ -4,7 +4,7 @@ from datetime import datetime
 import uvicorn
 import os
 
-from app.routers import health, area, simbolico, validar, exemplos, grafico
+from app.routers import health, area, simbolico, derivada, limite, validar, exemplos, grafico
 from app.core.config import settings
 
 app = FastAPI(
@@ -26,6 +26,8 @@ app.add_middleware(
 app.include_router(health.router)
 app.include_router(area.router)
 app.include_router(simbolico.router)
+app.include_router(derivada.router)
+app.include_router(limite.router)
 app.include_router(validar.router)
 app.include_router(exemplos.router)
 app.include_router(grafico.router)
@@ -40,7 +42,9 @@ async def root():
         "endpoints": [
             "/health",
             "/area",
-            "/simbolico", 
+            "/simbolico",
+            "/derivada",
+            "/limite",
             "/validar",
             "/exemplos",
             "/grafico"

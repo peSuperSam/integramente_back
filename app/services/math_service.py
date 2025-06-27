@@ -87,6 +87,76 @@ class MathService:
             raise ValueError(f"Erro no cálculo simbólico: {str(e)}")
     
     @staticmethod
+    def calcular_derivada(expr: sp.Expr, tipo_derivada: str = "primeira") -> Dict[str, Any]:
+        """
+        Calcula a derivada de uma função.
+        """
+        try:
+            x = sp.Symbol('x')
+            
+            # Determinar ordem da derivada
+            ordem = 1
+            if tipo_derivada.lower() == "segunda":
+                ordem = 2
+            elif tipo_derivada.lower() == "terceira":
+                ordem = 3
+            elif tipo_derivada.lower().startswith("n"):
+                ordem = int(tipo_derivada.lower().replace("n", "").replace("a", ""))
+            
+            # Calcular derivada
+            derivada = sp.diff(expr, x, ordem)
+            derivada_simplificada = sp.simplify(derivada)
+            
+            resultado = {
+                'derivada': str(derivada_simplificada),
+                'derivada_latex': sp.latex(derivada_simplificada),
+                'derivada_simplificada': str(derivada_simplificada)
+            }
+            
+            return resultado
+            
+        except Exception as e:
+            raise ValueError(f"Erro no cálculo de derivada: {str(e)}")
+    
+    @staticmethod
+    def calcular_limite(expr: sp.Expr, ponto_limite: float, tipo_limite: str = "bilateral") -> Dict[str, Any]:
+        """
+        Calcula o limite de uma função.
+        """
+        try:
+            x = sp.Symbol('x')
+            
+            # Calcular limite baseado no tipo
+            if tipo_limite.lower() == "esquerda":
+                limite = sp.limit(expr, x, ponto_limite, '-')
+            elif tipo_limite.lower() == "direita":
+                limite = sp.limit(expr, x, ponto_limite, '+')
+            else:  # bilateral
+                limite = sp.limit(expr, x, ponto_limite)
+            
+            # Verificar se o limite existe e é finito
+            valor_limite = None
+            existe_limite = False
+            
+            if limite != sp.oo and limite != -sp.oo and limite != sp.nan:
+                try:
+                    valor_limite = float(limite.evalf())
+                    existe_limite = True
+                except:
+                    existe_limite = False
+            
+            resultado = {
+                'valor_limite': valor_limite,
+                'limite_latex': sp.latex(limite) if existe_limite else None,
+                'existe_limite': existe_limite
+            }
+            
+            return resultado
+            
+        except Exception as e:
+            raise ValueError(f"Erro no cálculo de limite: {str(e)}")
+    
+    @staticmethod
     def gerar_passos_resolucao(funcao_original: str, antiderivada: str, a: Optional[float] = None, b: Optional[float] = None) -> List[str]:
         """
         Gera passos detalhados da resolução.
@@ -104,6 +174,45 @@ class MathService:
             ])
         else:
             passos.append("Resultado: " + antiderivada + " + C")
+        
+        return passos
+    
+    @staticmethod
+    def gerar_passos_derivada(funcao_original: str, derivada: str, tipo_derivada: str = "primeira") -> List[str]:
+        """
+        Gera passos detalhados para o cálculo de derivada.
+        """
+        passos = [
+            f"Função original: f(x) = {funcao_original}",
+            f"Calculando {tipo_derivada} derivada",
+            f"Aplicando regras de derivação",
+            f"Resultado: f'(x) = {derivada}" if tipo_derivada == "primeira" else f"Resultado: f''(x) = {derivada}"
+        ]
+        
+        return passos
+    
+    @staticmethod
+    def gerar_passos_limite(funcao_original: str, ponto_limite: float, valor_limite: Optional[float], 
+                          tipo_limite: str, existe_limite: bool) -> List[str]:
+        """
+        Gera passos detalhados para o cálculo de limite.
+        """
+        simbolo_limite = "lim"
+        if tipo_limite.lower() == "esquerda":
+            simbolo_limite = "lim⁻"
+        elif tipo_limite.lower() == "direita":
+            simbolo_limite = "lim⁺"
+        
+        passos = [
+            f"Função: f(x) = {funcao_original}",
+            f"Calculando: {simbolo_limite}(x→{ponto_limite}) f(x)",
+            f"Substituindo x = {ponto_limite}"
+        ]
+        
+        if existe_limite and valor_limite is not None:
+            passos.append(f"Resultado: {valor_limite}")
+        else:
+            passos.append("O limite não existe ou é infinito")
         
         return passos
     

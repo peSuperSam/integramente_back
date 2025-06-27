@@ -35,6 +35,31 @@ class ValidarRequest(BaseModel):
             raise ValueError('Função não pode estar vazia')
         return v.strip()
 
+class DerivadaRequest(BaseModel):
+    funcao: str = Field(..., description="Função matemática em formato string")
+    mostrar_passos: Optional[bool] = Field(True, description="Incluir passos da resolução")
+    formato_latex: Optional[bool] = Field(True, description="Incluir formato LaTeX")
+    tipo_derivada: Optional[str] = Field("primeira", description="Tipo de derivada: primeira, segunda, etc.")
+    
+    @validator('funcao')
+    def validar_funcao_nao_vazia(cls, v):
+        if not v.strip():
+            raise ValueError('Função não pode estar vazia')
+        return v.strip()
+
+class LimiteRequest(BaseModel):
+    funcao: str = Field(..., description="Função matemática em formato string")
+    ponto_limite: float = Field(..., description="Ponto para o qual x tende")
+    mostrar_passos: Optional[bool] = Field(True, description="Incluir passos da resolução")
+    formato_latex: Optional[bool] = Field(True, description="Incluir formato LaTeX")
+    tipo_limite: Optional[str] = Field("bilateral", description="Tipo: bilateral, esquerda, direita")
+    
+    @validator('funcao')
+    def validar_funcao_nao_vazia(cls, v):
+        if not v.strip():
+            raise ValueError('Função não pode estar vazia')
+        return v.strip()
+
 class GraficoRequest(BaseModel):
     funcao: str = Field(..., description="Função matemática em formato string")
     a: float = Field(..., description="Limite inferior do intervalo")
