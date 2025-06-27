@@ -80,7 +80,7 @@ Backend Structure:
 
 ## 🌐 API Endpoints
 
-### **Base URL**: `https://sua-url.com/`
+### **Base URL**: `https://integramente-backend.onrender.com`
 
 | Método | Endpoint | Descrição | Status |
 |--------|----------|-----------|---------|
@@ -93,8 +93,8 @@ Backend Structure:
 | POST | `/grafico` | Geração isolada de gráficos | ✅ |
 
 ### **Documentação Interativa**
-- **Swagger UI**: `https://sua-url.com/docs`
-- **ReDoc**: `https://sua-url.com/redoc`
+- **Swagger UI**:
+- **ReDoc**:
 
 ---
 
