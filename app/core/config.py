@@ -14,7 +14,7 @@ class Settings(BaseSettings):
     
     # Configurações de precisão numérica
     numerical_precision: int = 15  # Dígitos significativos
-    integration_method: str = "adaptive"  # adaptive, fixed, romberg
+    integration_method: str = "adaptive"  # adaptive, fixed, romberg (alta precisão)
     max_subdivisions: int = 100  # Para integração adaptativa
     
     # Configurações de gráfico otimizadas

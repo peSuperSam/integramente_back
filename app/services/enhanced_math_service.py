@@ -1,7 +1,8 @@
 import sympy as sp
 import numpy as np
 from scipy import integrate
-from scipy.integrate import quad, dblquad, romberg
+from scipy.integrate import quad, dblquad
+# romberg foi removido do SciPy recente
 import mpmath
 # from numba import jit, njit  # Removido para compatibilidade com Python 3.13
 from typing import Tuple, List, Optional, Dict, Any, Union
@@ -230,23 +231,23 @@ class EnhancedMathService:
                 }
                 
             elif metodo == "romberg":
-                # Método de Romberg (mais preciso para funções suaves)
+                # Método de alta precisão (substituto do Romberg removido)
                 try:
-                    # Criar array de pontos
-                    n_pontos = min(100, settings.default_resolution)
-                    pontos = np.linspace(a, b, n_pontos)
-                    valores = [func(x) for x in pontos]
-                    
-                    resultado = romberg(func, a, b, tol=tolerancia)
-                    erro = tolerancia  # Estimativa
+                    # Usar quad com tolerância muito baixa para simular Romberg
+                    resultado, erro = quad(
+                        func, a, b, 
+                        epsabs=tolerancia/10, 
+                        epsrel=tolerancia/10,
+                        limit=200  # Mais subdivisions para maior precisão
+                    )
                     
                     info = {
-                        'metodo': 'Romberg',
-                        'pontos_utilizados': n_pontos,
-                        'convergencia': 'extrapolação'
+                        'metodo': 'Alta Precisão (ex-Romberg)',
+                        'tolerancia_usada': tolerancia/10,
+                        'convergencia': 'adaptativa_alta_precisao'
                     }
                 except:
-                    # Fallback para quad
+                    # Fallback para quad padrão
                     resultado, erro = quad(func, a, b, epsabs=tolerancia)
                     info = {'metodo': 'Fallback Adaptativa'}
                     

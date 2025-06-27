@@ -287,7 +287,7 @@ class MLPredictionService:
                 'simpson': 0.5,
                 'trapz': 0.3,
                 'adaptativo': 0.7,
-                'romberg': 0.8,
+                'romberg': 0.8,  # Mantido para compatibilidade, usa alta precisão
                 'monte_carlo': 1.0
             }
             
