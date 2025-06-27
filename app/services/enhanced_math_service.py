@@ -3,7 +3,7 @@ import numpy as np
 from scipy import integrate
 from scipy.integrate import quad, dblquad, romberg
 import mpmath
-from numba import jit, njit
+# from numba import jit, njit  # Removido para compatibilidade com Python 3.13
 from typing import Tuple, List, Optional, Dict, Any, Union
 import base64
 import io
@@ -181,12 +181,12 @@ class EnhancedMathService:
             if func_numerica is None:
                 raise ValueError("Não foi possível converter para função numérica")
             
-            # Aplicar JIT se habilitado
-            if settings.enable_numba_jit:
-                try:
-                    func_numerica = EnhancedMathService._criar_funcao_jit(func_numerica)
-                except:
-                    pass  # Continuar sem JIT se houver problema
+            # JIT desabilitado para compatibilidade com Python 3.13
+            # if settings.enable_numba_jit:
+            #     try:
+            #         func_numerica = EnhancedMathService._criar_funcao_jit(func_numerica)
+            #     except:
+            #         pass  # Continuar sem JIT se houver problema
             
             # Escolher método de integração
             resultado, erro, info = EnhancedMathService._integrar_com_metodo(
@@ -201,15 +201,11 @@ class EnhancedMathService:
     @staticmethod
     def _criar_funcao_jit(func):
         """
-        Cria versão JIT-compilada da função para maior velocidade.
+        Função JIT desabilitada para compatibilidade com Python 3.13.
+        Retorna a função original sem modificações.
         """
-        try:
-            @njit
-            def func_jit(x):
-                return func(x)
-            return func_jit
-        except:
-            return func
+        # JIT compilation desabilitado para compatibilidade
+        return func
     
     @staticmethod
     def _integrar_com_metodo(func, a: float, b: float, metodo: str, tolerancia: float) -> Tuple[float, float, Dict[str, Any]]:

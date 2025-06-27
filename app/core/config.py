@@ -28,7 +28,7 @@ class Settings(BaseSettings):
     cache_ttl: int = 3600  # 1 hora
     
     # Configurações de performance
-    enable_numba_jit: bool = True
+    enable_numba_jit: bool = False  # Desabilitado para Python 3.13
     parallel_processing: bool = True
     max_workers: int = min(4, (os.cpu_count() or 1))
     
